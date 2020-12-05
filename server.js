@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const middleware = require('./middleware.js');
 
 app.use(bodyParser.json());
 
@@ -31,7 +32,7 @@ app.post('/login', function(req,res) {
     const password = req.body.password;
 
     const mockUsername="Jack";
-    const mockPassword="Jane";
+    const mockPassword="Jackpass";
 
     if(username===mockUsername && password===mockPassword) {
         res.json({
@@ -47,6 +48,20 @@ app.post('/login', function(req,res) {
             message: 'user or psswd do not match'
         })
     }
+})
+
+app.put('/folder', function(req,res) {
+    res.status(200);
+    res.send('working');
+    res.end();
+})
+
+app.get('/admin', middleware.checkToken, function(req, res){
+    res.json({
+        success: true,
+        message: 'admin ok',
+        adminData: 'sec data from db'
+    })
 })
 
 app.listen(8000, function() {
